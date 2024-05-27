@@ -1,8 +1,8 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Usuario from '../../models/Usuario'
-import { cadastrarUsuario } from '../../services/Service'
-import './cadastro.css'
+import  { ChangeEvent, useEffect, useState } from 'react'
+import Usuario from '../../models/Usuario';
+import { cadastrarUsuario } from '../../services/Service';
+import './cadastro.css';
+import { useNavigate } from 'react-router-dom';
 
 function Cadastro() {
 
@@ -62,8 +62,8 @@ function Cadastro() {
 
     } else {
       alert('Dados inconsistentes. Verifique as informações de cadastro.')
-      setUsuario({ ...usuario, senha: "" }) // Reinicia o campo de Senha
-      setConfirmaSenha("")                  // Reinicia o campo de Confirmar Senha
+      setUsuario({ ...usuario, senha: "" }) 
+      setConfirmaSenha("")                  
     }
   }
 
