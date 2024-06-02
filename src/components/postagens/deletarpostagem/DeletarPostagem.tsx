@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AuthContext } from '../../../contexts/AuthContext'
-import Postagem from '../../../models/Postagem'
 import { buscar, deletar } from '../../../services/Service'
+import { toastAlerta } from '../../../utils/toastAlerta'
+import Tema from '../../../models/Tema'
 
-function DeletarPostagem() {
-  const [postagem, setPostagem] = useState<Postagem>({} as Postagem)
+function DeletarTema() {
+  const [tema, setTema] = useState<Tema>({} as Tema)
 
   let navigate = useNavigate()
 
@@ -15,74 +16,71 @@ function DeletarPostagem() {
   const token = usuario.token
 
   async function buscarPorId(id: string) {
-    try {
-      await buscar(`/postagens/${id}`, setPostagem, {
-        headers: {
-          'Authorization': token
-        }
-      })
-    } catch (error: any) {
-      if (error.toString().includes('403')) {
-        alert('O token expirou, favor logar novamente')
-        handleLogout()
+      try {
+          await buscar(`/temas/${id}`, setTema, {
+              headers: {
+                  'Authorization': token
+              }
+          })
+      } catch (error: any) {
+          if (error.toString().includes('403')) {
+              toastAlerta('O token expirou, favor logar novamente', 'info')
+              handleLogout()
+          }
       }
-    }
   }
 
   useEffect(() => {
-    if (token === '') {
-      alert('Você precisa estar logado')
-      navigate('/login')
-    }
+      if (token === '') {
+          toastAlerta('Você precisa estar logado', 'info')
+          navigate('/login')
+      }
   }, [token])
 
   useEffect(() => {
-    if (id !== undefined) {
-      buscarPorId(id)
-    }
+      if (id !== undefined) {
+          buscarPorId(id)
+      }
   }, [id])
 
   function retornar() {
-    navigate("/postagens")
+      navigate("/temas")
   }
 
-  async function deletarPostagem() {
-    try {
-      await deletar(`/postagens/${id}`, {
-        headers: {
-          'Authorization': token
-        }
-      })
+  async function deletarTema() {
+      try {
+          await deletar(`/temas/${id}`, {
+              headers: {
+                  'Authorization': token
+              }
+          })
 
-      alert('Postagem apagada com sucesso')
+          toastAlerta('Tema apagado com sucesso', 'sucesso')
 
-    } catch (error) {
-      alert('Erro ao apagar a Postagem')
-    }
+      } catch (error) {
+          toastAlerta('Erro ao apagar o Tema', 'erro')
+      }
 
-    retornar()
+      retornar()
   }
   return (
-    <div className='container w-1/3 mx-auto'>
-      <h1 className='text-4xl text-center my-4'>Deletar postagem</h1>
+      <div className='container w-1/3 mx-auto'>
+          <h1 className='text-4xl text-center my-4'>Deletar tema</h1>
 
-      <p className='text-center font-semibold mb-4'>Você tem certeza de que deseja apagar a postagem a seguir?</p>
+          <p className='text-center font-semibold mb-4'>Você tem certeza de que deseja apagar o tema a seguir?</p>
 
-      <div className='border flex flex-col rounded-2xl overflow-hidden justify-between'>
-        <header className='py-2 px-6 bg-indigo-600 text-white font-bold text-2xl'>Postagem</header>
-        <div className="p-4">
-          <p className='text-xl h-full'>{postagem.titulo}</p>
-          <p>{postagem.texto}</p>
-        </div>
-        <div className="flex">
-          <button className='text-slate-100 bg-red-400 hover:bg-red-600 w-full py-2' onClick={retornar}>Não</button>
-          <button className='w-full text-slate-100 bg-indigo-400 hover:bg-indigo-600 flex items-center justify-center' onClick={deletarPostagem}>
-            Sim
-          </button>
-        </div>
+          <div className='border flex flex-col rounded-2xl overflow-hidden justify-between'>
+              <header className='py-2 px-6 bg-indigo-600 text-white font-bold text-2xl'>Tema</header>
+              <p className='p-8 text-3xl bg-slate-200 h-full'>{tema.descricao}</p>
+              <div className="flex">
+                  <button className='text-slate-100 bg-red-400 hover:bg-red-600 w-full py-2' onClick={retornar}>Não</button>
+                  <button className='w-full text-slate-100 bg-indigo-400 hover:bg-indigo-600 flex items-center justify-center' onClick={deletarTema}>
+                      Sim
+                  </button>
+              </div>
+          </div>
       </div>
-    </div>
   )
 }
 
-export default DeletarPostagem
+export default DeletarTema
