@@ -13,7 +13,6 @@ import ListaPostagens from './components/postagens/listapostagens/ListaPostagens
 import FormularioPostagem from './components/postagens/formulariopostagem/FormularioPostagem';
 import Perfil from './pages/perfil/Perfil';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
 import DeletarPostagem from './components/postagens/deletarpostagem/DeletarPostagem';
 
 function App() {
